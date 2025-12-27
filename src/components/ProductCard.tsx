@@ -1,16 +1,15 @@
-import { MessageCircle } from 'lucide-react'
+import { ShoppingBag } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import type { Product } from '../data/products'
 import { Button } from './ui/button'
+import { useCart } from '../context/CartContext'
 
 interface ProductCardProps {
     product: Product
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-    const phoneNumber = "5215555555555" // TODO: Replace with real number
-    const message = `Hola Charm Star, me interesa comprar el ${product.name} de $${product.price}. ¿Está disponible?`
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
+    const { addItem } = useCart()
 
     return (
         <div className="group relative flex flex-col gap-4">
@@ -34,21 +33,14 @@ export function ProductCard({ product }: ProductCardProps) {
                 <p className="text-lg font-semibold text-foreground">${product.price}</p>
             </div>
 
-            <div className="mt-auto pt-2">
-                <a
-                    href={whatsappUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full block"
+            <div className="mt-auto pt-2 grid gap-2">
+                <Button
+                    className="w-full gap-2"
+                    onClick={() => addItem(product)}
                 >
-                    <Button
-                        variant="outline"
-                        className="w-full bg-transparent border-input text-foreground hover:bg-primary hover:text-primary-foreground transition-colors gap-2"
-                    >
-                        <MessageCircle className="h-4 w-4" />
-                        Comprar por WhatsApp
-                    </Button>
-                </a>
+                    <ShoppingBag className="h-4 w-4" />
+                    Agregar
+                </Button>
             </div>
         </div>
     )

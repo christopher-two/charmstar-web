@@ -1,12 +1,17 @@
 import { Link, useParams } from 'react-router-dom'
+import { useState } from 'react'
 import { products } from '../data/products'
 import { Button } from '../components/ui/button'
-import { MessageCircle, ArrowLeft } from 'lucide-react'
+import { MessageCircle, ArrowLeft, ShoppingBag, Share2 } from 'lucide-react'
 import { SEO } from '../components/SEO'
+import { useCart } from '../context/CartContext'
 
 export function ProductPage() {
     const { id } = useParams<{ id: string }>()
+    const { addItem } = useCart()
     const product = products.find(p => p.id === id)
+
+    const [isCopied, setIsCopied] = useState(false)
 
     if (!product) {
         return (
@@ -23,6 +28,30 @@ export function ProductPage() {
     const message = `Hola Charm Star, me interesa comprar el ${product.name} de $${product.price} (ID: ${product.id}). ¿Está disponible?`
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
 
+    const handleShare = async () => {
+        const shareData = {
+            title: `Charm Star - ${product.name}`,
+            text: `¡Mira este increíble ${product.name} en Charm Star!`,
+            url: window.location.href
+        }
+
+        if (navigator.share) {
+            try {
+                await navigator.share(shareData)
+            } catch (err) {
+                console.log('Error sharing:', err)
+            }
+        } else {
+            try {
+                await navigator.clipboard.writeText(window.location.href)
+                setIsCopied(true)
+                setTimeout(() => setIsCopied(false), 2000)
+            } catch (err) {
+                console.log('Error copying to clipboard', err)
+            }
+        }
+    }
+
     return (
         <div className="container px-4 md:px-6 py-12">
             <SEO
@@ -32,10 +61,21 @@ export function ProductPage() {
                 image={product.image}
             />
 
-            <Link to="/shop" className="inline-flex items-center text-muted-foreground hover:text-foreground mb-8 transition-colors">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Volver al catálogo
-            </Link>
+            <div className="flex justify-between items-center mb-8">
+                <Link to="/shop" className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors">
+                    <ArrowLeft className="h-4 w-4 mr-2" />
+                    Volver al catálogo
+                </Link>
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    className="gap-2 text-muted-foreground hover:text-foreground"
+                    onClick={handleShare}
+                >
+                    <Share2 className="h-4 w-4" />
+                    {isCopied ? '¡Enlace copiado!' : 'Compartir'}
+                </Button>
+            </div>
 
             <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
                 <div className="relative aspect-square bg-muted rounded-xl overflow-hidden">
@@ -66,20 +106,28 @@ export function ProductPage() {
                         </p>
                     </div>
 
-                    <div className="mt-auto">
+                    <div className="mt-auto space-y-3">
+                        <Button
+                            size="lg"
+                            className="w-full md:w-auto text-lg px-8 gap-2"
+                            onClick={() => addItem(product)}
+                        >
+                            <ShoppingBag className="h-5 w-5" />
+                            Agregar al Carrito
+                        </Button>
                         <a
                             href={whatsappUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="block w-full md:w-auto"
                         >
-                            <Button size="lg" className="w-full md:w-auto text-lg px-8 gap-2">
+                            <Button variant="outline" size="lg" className="w-full md:w-auto text-lg px-8 gap-2">
                                 <MessageCircle className="h-5 w-5" />
-                                Comprar ahora por WhatsApp
+                                Comprar directo por WhatsApp
                             </Button>
                         </a>
                         <p className="text-xs text-muted-foreground mt-4 text-center md:text-left">
-                            Serás redirigido a WhatsApp para concretar tu compra
+                            Puedes agregar varios productos al carrito para un solo pedido
                         </p>
                     </div>
                 </div>

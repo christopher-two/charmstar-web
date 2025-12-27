@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, ShoppingBag } from 'lucide-react'
 import { Button } from './ui/button'
 import { ModeToggle } from './ModeToggle'
+import { useCart } from '../context/CartContext'
 
 export function Navbar() {
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpenState] = useState(false)
+    const { items, setIsOpen } = useCart()
     const location = useLocation()
 
     // Handle scroll to anchor when location changes
@@ -52,6 +54,19 @@ export function Navbar() {
                     {/* Right: Actions (Desktop) */}
                     <div className="hidden md:flex items-center justify-end gap-4 w-1/3">
                         {location.pathname !== '/' && <ModeToggle />}
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="relative"
+                            onClick={() => setIsOpen(true)}
+                        >
+                            <ShoppingBag className="h-5 w-5" />
+                            {items.length > 0 && (
+                                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
+                                    {items.length}
+                                </span>
+                            )}
+                        </Button>
                         <Link to="/shop">
                             <Button>
                                 Ir a la Tienda
@@ -64,7 +79,7 @@ export function Navbar() {
                         {location.pathname !== '/' && <ModeToggle />}
                         <button
                             className="p-2 text-foreground"
-                            onClick={() => setIsOpen(!isOpen)}
+                            onClick={() => setIsOpenState(!isOpen)}
                         >
                             {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
                         </button>
@@ -81,12 +96,12 @@ export function Navbar() {
                                 key={link.name}
                                 to={link.href}
                                 className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-                                onClick={() => setIsOpen(false)}
+                                onClick={() => setIsOpenState(false)}
                             >
                                 {link.name}
                             </Link>
                         ))}
-                        <Link to="/shop" onClick={() => setIsOpen(false)}>
+                        <Link to="/shop" onClick={() => setIsOpenState(false)}>
                             <Button className="w-full">
                                 Ir a la Tienda
                             </Button>

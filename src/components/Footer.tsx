@@ -12,6 +12,9 @@ export function Footer() {
                     <p className="text-sm text-muted-foreground">
                         © {new Date().getFullYear()} Charm Star. Todos los derechos reservados.
                     </p>
+                    <p className="text-xs text-muted-foreground mt-2">
+                        Esta página forma parte de <a href="https://www.override.com.mx" target="_blank" rel="noopener noreferrer" className="font-medium hover:text-foreground transition-colors">Atomo by Override</a>
+                    </p>
                 </div>
 
                 <div className="flex items-center gap-6">
