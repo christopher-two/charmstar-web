@@ -19,7 +19,7 @@ export function CartSidebar() {
     }, [isOpen])
 
     const handleCheckout = () => {
-        const phoneNumber = "5215555555555" // TODO: Replace with real number
+        const phoneNumber = "524521793811"
 
         let message = "Hola Charm Star, me interesa realizar el siguiente pedido:\n\n"
         items.forEach(item => {

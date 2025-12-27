@@ -24,7 +24,7 @@ export function ProductPage() {
         )
     }
 
-    const phoneNumber = "5215555555555" // TODO: Replace with real number
+    const phoneNumber = "524521793811"
     const message = `Hola Charm Star, me interesa comprar el ${product.name} de $${product.price} (ID: ${product.id}). ¿Está disponible?`
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
 
