@@ -71,4 +71,53 @@ export const products: Product[] = [
         category: 'Charms',
         image: 'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/4ca559a5-a86c-4c2b-bc24-4f7d507800bc.jpeg',
     },
+    {
+        id: '10',
+        name: 'Charm Mickey Aprendiz de Mago de Disney',
+        price: 300,
+        category: 'Charms',
+        image: 'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/ff521395-6190-417d-aad7-ed03fb5aee9e.jpeg',
+    },
+    {
+        id: '11',
+        name: 'Charm Corazon',
+        price: 200,
+        category: 'Charms',
+        image: 'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/8aa28569-5505-495c-94b3-fed0dbfefeb2.jpeg',
+    },
+    {
+        id: '12',
+        name: 'Charm Perro',
+        price: 300,
+        category: 'Charms',
+        image: 'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/fc4b835d-7eca-44bc-9498-89dce2a7f720.jpeg',
+    },
+    {
+        id: '13',
+        name: 'Charm Búho',
+        price: 300,
+        category: 'Charms',
+        image: 'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/39a8efe5-013f-415f-a413-806a3606fa9a.jpeg',
+    },
+    {
+        id: '14',
+        name: 'Charm Mariposa',
+        price: 300,
+        category: 'Charms',
+        image: 'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/d0025e11-a419-43d5-a281-020c91d9f005.jpeg',
+    },
+    {
+        id: '15',
+        name: 'Charm Love escrito a mano',
+        price: 280,
+        category: 'Charms',
+        image: 'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/efce63ad-daad-4918-b834-ca39acbe7a16.jpeg',
+    },
+    {
+        id: '16',
+        name: 'Charm Perezoso',
+        price: 300,
+        category: 'Charms',
+        image: 'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/cdf3d017-d413-45f5-a165-e846664674d3.jpeg',
+    }
 ]
