@@ -5,6 +5,10 @@ import { Button } from '../components/ui/button'
 import { MessageCircle, ArrowLeft, ShoppingBag, Share2 } from 'lucide-react'
 import { SEO } from '../components/SEO'
 import { useCart } from '../context/CartContext'
+import { ImageModal } from '../components/ImageModal'
+import { ProductCard } from '../components/ProductCard'
+import { cn } from '../lib/utils'
+import { useEffect } from 'react'
 
 export function ProductPage() {
     const { id } = useParams<{ id: string }>()
@@ -12,6 +16,15 @@ export function ProductPage() {
     const product = products.find(p => p.id === id)
 
     const [isCopied, setIsCopied] = useState(false)
+    const [selectedImage, setSelectedImage] = useState<string>('')
+    const [isModalOpen, setIsModalOpen] = useState(false)
+
+    // Update selected image when product loads
+    useEffect(() => {
+        if (product) {
+            setSelectedImage(product.image)
+        }
+    }, [product])
 
     if (!product) {
         return (
@@ -52,6 +65,14 @@ export function ProductPage() {
         }
     }
 
+    // Prepare images array (combining main image + additional images if any)
+    const allImages = product.images && product.images.length > 0
+        ? product.images
+        : [product.image]
+
+    // Ensure selectedImage defaults to something valid if state isn't ready
+    const currentImage = selectedImage || product.image
+
     return (
         <div className="container px-4 md:px-6 py-12">
             <SEO
@@ -77,13 +98,48 @@ export function ProductPage() {
                 </Button>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
-                <div className="relative aspect-square bg-muted rounded-xl overflow-hidden">
-                    <img
-                        src={product.image}
-                        alt={product.name}
-                        className="w-full h-full object-cover"
-                    />
+            <div key={product.id} className="grid md:grid-cols-2 gap-8 lg:gap-12 animate-fade-in-up">
+                <div className="space-y-4">
+                    {/* Main Image */}
+                    <div
+                        className="relative aspect-square bg-muted rounded-xl overflow-hidden cursor-zoom-in group"
+                        onClick={() => setIsModalOpen(true)}
+                    >
+                        <img
+                            src={currentImage}
+                            alt={product.name}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+                            <span className="bg-background/80 backdrop-blur text-xs px-3 py-1 rounded-full shadow-sm">
+                                Click para ampliar
+                            </span>
+                        </div>
+                    </div>
+
+                    {/* Thumbnails */}
+                    {allImages.length > 1 && (
+                        <div className="grid grid-cols-4 gap-4">
+                            {allImages.map((img, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => setSelectedImage(img)}
+                                    className={cn(
+                                        "relative aspect-square rounded-lg overflow-hidden border-2 transition-all",
+                                        currentImage === img
+                                            ? "border-primary ring-2 ring-primary/20"
+                                            : "border-transparent hover:border-muted-foreground/50"
+                                    )}
+                                >
+                                    <img
+                                        src={img}
+                                        alt={`${product.name} view ${index + 1}`}
+                                        className="w-full h-full object-cover"
+                                    />
+                                </button>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 <div className="flex flex-col">
@@ -130,6 +186,27 @@ export function ProductPage() {
                             Puedes agregar varios productos al carrito para un solo pedido
                         </p>
                     </div>
+                </div>
+            </div>
+
+            <ImageModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                image={currentImage}
+                alt={product.name}
+            />
+
+            {/* Related Products Section */}
+            <div className="mt-20 border-t pt-12">
+                <h2 className="text-2xl font-serif font-medium mb-8">También te podría gustar</h2>
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                    {products
+                        .filter(p => p.category === product.category && p.id !== product.id)
+                        .sort(() => Math.random() - 0.5) // Simple shuffle
+                        .slice(0, 4)
+                        .map(relatedProduct => (
+                            <ProductCard key={relatedProduct.id} product={relatedProduct} />
+                        ))}
                 </div>
             </div>
         </div>

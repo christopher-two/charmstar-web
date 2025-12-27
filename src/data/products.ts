@@ -4,6 +4,7 @@ export interface Product {
     price: number
     category: 'Charms' | 'Pulseras' | 'Collares' | 'Anillos' | 'Sonny Angel' | 'Accesorios'
     image: string
+    images?: string[]
 }
 
 export const products: Product[] = [
@@ -119,5 +120,42 @@ export const products: Product[] = [
         price: 300,
         category: 'Charms',
         image: 'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/cdf3d017-d413-45f5-a165-e846664674d3.jpeg',
+    },
+    {
+        id: '17',
+        name: 'Charm Spider-Man',
+        price: 310,
+        category: 'Charms',
+        image: 'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/bc587c94-0fe7-451e-8371-61e149845078.jpeg',
+    },
+    {
+        id: '18',
+        name: 'Charm Star',
+        price: 299,
+        category: 'Charms',
+        image: 'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/star/b401aee9-a2e5-4700-9e9f-c3bdb5ada04a.jpeg',
+        images: [
+            'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/star/c4f896ae-6cd9-4962-ad51-06a3dfd6f2b5.jpeg',
+        ]
+    },
+    {
+        id: '19',
+        name: 'Charm Alfabeto A-Z',
+        price: 250,
+        category: 'Charms',
+        image: 'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/alfabeto/8e25dda9-70e5-4fc9-9c8f-ef3ae6a602d8.jpeg',
+        images: [
+            'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/alfabeto/25802488-8fb3-44be-9f34-c1de15812209.jpeg',
+            'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/alfabeto/1fddf922-b63f-4701-af45-4516f491732d.jpeg',
+            'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/alfabeto/53e0f496-048b-4fd5-bf35-51499f3de7d7.jpeg',
+            'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/alfabeto/5d8a7fd9-614b-4c81-8a93-ee1d65c1739b.jpeg',
+            'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/alfabeto/7c071edb-a0ef-4a11-9641-70d4b9597e6a.jpeg',
+            'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/alfabeto/7da65f0a-db18-47b4-b077-eb79eeaa86a9.jpeg',
+            'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/alfabeto/809d44bf-ca9b-4052-a540-48eece1542ab.jpeg',
+            'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/alfabeto/910a6c3c-09d0-4093-995f-fa8928052e4a.jpeg',
+            'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/alfabeto/b066cfed-1aec-4019-bb7f-6bf6192e7eeb.jpeg',
+            'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/alfabeto/e51dbde0-9377-431e-a90f-63b32f4d6d18.jpeg',
+            'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/alfabeto/fdb508d7-967c-4857-8ebf-a2c4a33d6b53.jpeg'
+        ]
     }
 ]
