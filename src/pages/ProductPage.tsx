@@ -1,8 +1,8 @@
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { products } from '../data/products'
 import { Button } from '../components/ui/button'
-import { MessageCircle, ArrowLeft, ShoppingBag, Share2 } from 'lucide-react'
+import { MessageCircle, ArrowLeft, ShoppingBag, Share2, Truck, CreditCard, ShieldCheck } from 'lucide-react'
 import { SEO } from '../components/SEO'
 import { useCart } from '../context/CartContext'
 import { ImageModal } from '../components/ImageModal'
@@ -12,6 +12,7 @@ import { useEffect } from 'react'
 
 export function ProductPage() {
     const { id } = useParams<{ id: string }>()
+    const navigate = useNavigate()
     const { addItem } = useCart()
     const product = products.find(p => p.id === id)
 
@@ -73,6 +74,14 @@ export function ProductPage() {
     // Ensure selectedImage defaults to something valid if state isn't ready
     const currentImage = selectedImage || product.image
 
+    const handleBack = () => {
+        if (window.history.length > 1) {
+            navigate(-1)
+        } else {
+            navigate('/shop')
+        }
+    }
+
     return (
         <div className="container px-4 md:px-6 py-12">
             <SEO
@@ -83,10 +92,13 @@ export function ProductPage() {
             />
 
             <div className="flex justify-between items-center mb-8">
-                <Link to="/shop" className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors">
+                <button
+                    onClick={handleBack}
+                    className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors"
+                >
                     <ArrowLeft className="h-4 w-4 mr-2" />
                     Volver al catálogo
-                </Link>
+                </button>
                 <Button
                     variant="ghost"
                     size="sm"
@@ -196,8 +208,42 @@ export function ProductPage() {
                 alt={product.name}
             />
 
-            {/* Related Products Section */}
+            {/* Purchase Info Section */}
             <div className="mt-20 border-t pt-12">
+                <h2 className="text-2xl font-serif font-medium mb-8">Información de Compra</h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div className="flex flex-col items-center text-center p-6 bg-muted/30 rounded-xl border border-border/50">
+                        <div className="p-4 bg-primary/10 rounded-full mb-4">
+                            <Truck className="h-8 w-8 text-primary" />
+                        </div>
+                        <h3 className="font-serif font-medium text-lg text-foreground mb-2">Envíos Seguros</h3>
+                        <p className="text-muted-foreground">
+                            Realizamos envíos a todo México a través de paqueterías confiables.
+                        </p>
+                    </div>
+                    <div className="flex flex-col items-center text-center p-6 bg-muted/30 rounded-xl border border-border/50">
+                        <div className="p-4 bg-primary/10 rounded-full mb-4">
+                            <CreditCard className="h-8 w-8 text-primary" />
+                        </div>
+                        <h3 className="font-serif font-medium text-lg text-foreground mb-2">Pago Flexible</h3>
+                        <p className="text-muted-foreground">
+                            Aceptamos pagos mediante transferencia bancaria y depósito en OXXO para tu comodidad.
+                        </p>
+                    </div>
+                    <div className="flex flex-col items-center text-center p-6 bg-muted/30 rounded-xl border border-border/50">
+                        <div className="p-4 bg-primary/10 rounded-full mb-4">
+                            <ShieldCheck className="h-8 w-8 text-primary" />
+                        </div>
+                        <h3 className="font-serif font-medium text-lg text-foreground mb-2">Garantía de Calidad</h3>
+                        <p className="text-muted-foreground">
+                            Todos nuestros productos son verificados y empacados cuidadosamente para asegurar que lleguen perfectos.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            {/* Related Products Section */}
+            <div className="mt-12 border-t pt-12">
                 <h2 className="text-2xl font-serif font-medium mb-8">También te podría gustar</h2>
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
                     {products

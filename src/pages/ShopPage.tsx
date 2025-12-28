@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { products } from '../data/products'
 import { ProductCard } from '../components/ProductCard'
 import { cn } from '../lib/utils'
@@ -6,6 +6,7 @@ import { SEO } from '../components/SEO'
 
 import { Search, Sparkles } from 'lucide-react'
 import { Input } from '../components/ui/input'
+import { useEffect } from 'react'
 
 const validCategories = [
     'Todas',
@@ -18,10 +19,27 @@ const validCategories = [
 ] as const
 
 export function ShopPage() {
-    const [activeCategory, setActiveCategory] = useState<typeof validCategories[number]>('Todas')
-    const [searchQuery, setSearchQuery] = useState('')
-    const [sortBy, setSortBy] = useState('featured')
-    const [priceRange, setPriceRange] = useState({ min: '', max: '' })
+    const [searchParams, setSearchParams] = useSearchParams()
+
+    // Get values from URL or default
+    const activeCategory = (searchParams.get('category') as typeof validCategories[number]) || 'Todas'
+    const searchQuery = searchParams.get('q') || ''
+    const sortBy = searchParams.get('sort') || 'featured'
+    const minPrice = searchParams.get('minPrice') || ''
+    const maxPrice = searchParams.get('maxPrice') || ''
+
+    // Helper to update specific params while keeping others
+    const updateParams = (updates: Record<string, string | null>) => {
+        const newParams = new URLSearchParams(searchParams)
+        Object.entries(updates).forEach(([key, value]) => {
+            if (value === null || value === '') {
+                newParams.delete(key)
+            } else {
+                newParams.set(key, value)
+            }
+        })
+        setSearchParams(newParams, { replace: true })
+    }
 
     const filteredProducts = products
         .filter(product => {
@@ -33,8 +51,8 @@ export function ShopPage() {
                 product.price.toString().includes(searchQuery)
 
             const price = product.price
-            const min = priceRange.min ? parseFloat(priceRange.min) : 0
-            const max = priceRange.max ? parseFloat(priceRange.max) : Infinity
+            const min = minPrice ? parseFloat(minPrice) : 0
+            const max = maxPrice ? parseFloat(maxPrice) : Infinity
             const matchesPrice = price >= min && price <= max
 
             return matchesCategory && matchesSearch && matchesPrice
@@ -48,6 +66,12 @@ export function ShopPage() {
                 default: return 0
             }
         })
+
+    // Cleanup params if needed (optional)
+    useEffect(() => {
+        // If query params are invalid, we could clean them here. 
+        // For now, we trust basic string parsing.
+    }, [])
 
     return (
         <div className="container px-4 md:px-6 py-12">
@@ -70,7 +94,7 @@ export function ShopPage() {
                                     placeholder="Buscar productos..."
                                     className="pl-9"
                                     value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    onChange={(e) => updateParams({ q: e.target.value })}
                                 />
                             </div>
                         </div>
@@ -81,7 +105,7 @@ export function ShopPage() {
                             <select
                                 className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                                 value={sortBy}
-                                onChange={(e) => setSortBy(e.target.value)}
+                                onChange={(e) => updateParams({ sort: e.target.value })}
                             >
                                 <option value="featured">Destacados</option>
                                 <option value="price-asc">Precio: Menor a Mayor</option>
@@ -98,14 +122,14 @@ export function ShopPage() {
                                 <Input
                                     type="number"
                                     placeholder="Min"
-                                    value={priceRange.min}
-                                    onChange={(e) => setPriceRange(prev => ({ ...prev, min: e.target.value }))}
+                                    value={minPrice}
+                                    onChange={(e) => updateParams({ minPrice: e.target.value })}
                                 />
                                 <Input
                                     type="number"
                                     placeholder="Max"
-                                    value={priceRange.max}
-                                    onChange={(e) => setPriceRange(prev => ({ ...prev, max: e.target.value }))}
+                                    value={maxPrice}
+                                    onChange={(e) => updateParams({ maxPrice: e.target.value })}
                                 />
                             </div>
                         </div>
@@ -117,7 +141,7 @@ export function ShopPage() {
                                 {validCategories.map((category) => (
                                     <button
                                         key={category}
-                                        onClick={() => setActiveCategory(category)}
+                                        onClick={() => updateParams({ category: category })}
                                         className={cn(
                                             "whitespace-nowrap px-4 py-2 text-left text-sm rounded-md transition-colors",
                                             activeCategory === category
@@ -141,7 +165,7 @@ export function ShopPage() {
                         </h1>
                         <p className="text-muted-foreground mt-2">
                             {filteredProducts.length} productos encontrados
-                            {(searchQuery || priceRange.min || priceRange.max) && ` con los filtros actuales`}
+                            {(searchQuery || minPrice || maxPrice) && ` con los filtros actuales`}
                         </p>
                     </div>
 
@@ -164,12 +188,7 @@ export function ShopPage() {
                                 No hay productos que coincidan con tus filtros actuales. Intenta ajustar tu búsqueda para encontrar la joya perfecta.
                             </p>
                             <button
-                                onClick={() => {
-                                    setSearchQuery('');
-                                    setActiveCategory('Todas');
-                                    setPriceRange({ min: '', max: '' });
-                                    setSortBy('featured');
-                                }}
+                                onClick={() => setSearchParams({})}
                                 className="inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-primary text-primary-foreground font-medium text-sm hover:opacity-90 transition-opacity shadow-sm hover:shadow"
                             >
                                 Ver todo el catálogo

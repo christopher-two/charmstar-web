@@ -224,6 +224,7 @@ export const products: Product[] = [
         category: 'Pulseras',
         image: 'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/pulseras/fedd7f98-249c-40fa-ae16-f0ee58973ca0.jpeg',
         images: [
+            'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/pulseras/fedd7f98-249c-40fa-ae16-f0ee58973ca0.jpeg',
             'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/pulseras/a83f68ce-9fb8-4637-a516-ae921334f8ad.jpeg',
         ]
     },
