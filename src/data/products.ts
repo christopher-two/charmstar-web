@@ -157,5 +157,102 @@ export const products: Product[] = [
             'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/alfabeto/e51dbde0-9377-431e-a90f-63b32f4d6d18.jpeg',
             'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/alfabeto/fdb508d7-967c-4857-8ebf-a2c4a33d6b53.jpeg'
         ]
+    },
+    {
+        id: '30',
+        name: 'Charm Oso',
+        price: 300,
+        category: 'Charms',
+        image: 'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/72f9f287-3c78-467d-8e76-cc71e773714e.jpeg'
+    },
+    {
+        id: '31',
+        name: 'Charm Virgencita',
+        price: 295,
+        category: 'Charms',
+        image: 'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/e4d5e919-afd8-41bc-b3cc-1c82c23aca10.jpeg'
+    },
+    {
+        id: '32',
+        name: 'Charm Luciérnaga',
+        price: 310,
+        category: 'Charms',
+        image: 'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/2ff03b41-380b-4687-a58f-0a4cbaeb9552.jpeg'
+    },
+
+    // --- PULSERAS ---
+
+    {
+        id: '20',
+        name: 'Pulsera Ajustable Acero Inoxidable',
+        price: 280,
+        category: 'Pulseras',
+        image: 'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/pulseras/4e0040ad-dff9-4f34-8296-9756b3cb7101.jpeg',
+    },
+    {
+        id: '21',
+        name: 'Pulsera Ajustable Acero Inoxidable',
+        price: 280,
+        category: 'Pulseras',
+        image: 'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/pulseras/2abfdc57-6843-4fbc-93a2-94e5abc10a5a.jpeg',
+    },
+    {
+        id: '22',
+        name: 'Pulsera Ajustable Acero Inoxidable',
+        price: 280,
+        category: 'Pulseras',
+        image: 'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/pulseras/11b9ed1c-df75-4638-8d33-c52972fdaba7.jpeg',
+    },
+    {
+        id: '23',
+        name: 'Pulsera Barril Acero Inoxidable',
+        price: 380,
+        category: 'Pulseras',
+        image: 'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/pulseras/11b9ed1c-df75-4638-8d33-c52972fdaba7.jpeg',
+    },
+    {
+        id: '24',
+        name: 'Pulsera Corazón Acero Inoxidable',
+        price: 500,
+        category: 'Pulseras',
+        image: 'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/pulseras/d248a573-cca6-46b5-a63a-6269d4355770.jpeg',
+    },
+    {
+        id: '25',
+        name: 'Pulsera Corona Acero Inoxidable',
+        price: 500,
+        category: 'Pulseras',
+        image: 'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/pulseras/d248a573-cca6-46b5-a63a-6269d4355770.jpeg',
+    },
+    {
+        id: '26',
+        name: 'Pulsera Corona Acero Inoxidable',
+        price: 500,
+        category: 'Pulseras',
+        image: 'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/pulseras/fedd7f98-249c-40fa-ae16-f0ee58973ca0.jpeg',
+        images: [
+            'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/pulseras/a83f68ce-9fb8-4637-a516-ae921334f8ad.jpeg',
+        ]
+    },
+    {
+        id: '27',
+        name: 'Pulsera Corazón infinito centelleante',
+        price: 580,
+        category: 'Pulseras',
+        image: 'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/pulseras/522be9af-8b23-46c4-8e14-69f33bedc160.jpeg',
+    },
+    {
+        id: '28',
+        name: 'Pulsera Rígida Plata',
+        price: 500,
+        category: 'Pulseras',
+        image: 'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/pulseras/ff005800-9df6-422a-9bfb-465e2ee5521d.jpeg',
+    },
+    {
+        id: '29',
+        name: 'Pulsera Doble',
+        price: 390,
+        category: 'Pulseras',
+        image: 'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/pulseras/6e4f200d-504c-4bd1-9b05-5ea800a02ef8.jpeg'
     }
 ]
