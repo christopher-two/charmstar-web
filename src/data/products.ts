@@ -218,13 +218,6 @@ export const products: Product[] = [
         image: 'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/pulseras/d248a573-cca6-46b5-a63a-6269d4355770.jpeg',
     },
     {
-        id: '25',
-        name: 'Pulsera Corona Acero Inoxidable',
-        price: 500,
-        category: 'Pulseras',
-        image: 'https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/imagenes/charmstar/pulseras/d248a573-cca6-46b5-a63a-6269d4355770.jpeg',
-    },
-    {
         id: '26',
         name: 'Pulsera Corona Acero Inoxidable',
         price: 500,
