@@ -8,7 +8,6 @@ import { MessageCircle, ArrowLeft, ShoppingBag, Share2, Truck, CreditCard, Shiel
 import { SEO } from '../components/SEO'
 import { useCart } from '../context/CartContext'
 import { ImageModal } from '../components/ImageModal'
-import { ProductCard } from '../components/ProductCard'
 import { cn } from '../lib/utils'
 
 export function ProductPage() {

@@ -28,8 +28,6 @@ export const AdminProductForm: React.FC<AdminProductFormProps> = ({
     handleSubmit,
     formState: { errors },
     setValue,
-    getValues,
-    reset,
   } = useForm<ProductFormData>({
     defaultValues: initialData || {
       name: '',

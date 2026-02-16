@@ -63,12 +63,7 @@ export const AdminDashboard: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const handleCancelEdit = () => {
-    setEditingProduct(undefined)
-    if (window.innerWidth < 1024) {
-      setActiveSection('products')
-    }
-  }
+
 
   return (
     <div className="min-h-screen bg-background pb-20 lg:pb-0 font-sans">

@@ -2,7 +2,7 @@ import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import path from 'path'
 import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3'
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
+
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
@@ -87,10 +87,7 @@ export default defineConfig(({ mode }) => {
             }
           })
 
-          server.middlewares.use('/api/upload-url', async (req, res, next) => {
-            // Keep this for reference or backward compat if needed, but we are switching to proxy
-            next()
-          })
+
 
           server.middlewares.use('/api/delete-file', async (req, res, next) => {
             if (req.method === 'POST') {
