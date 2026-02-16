@@ -5,6 +5,13 @@
  * Endpoint: /api/upload-url
  * Method: POST
  * Body: { fileName: string, fileType: string }
+ * 
+ * Environment Variables Used (PRIVATE - server only):
+ * - R2_ENDPOINT
+ * - R2_ACCESS_KEY_ID
+ * - R2_SECRET_ACCESS_KEY
+ * - VITE_R2_BUCKET_NAME (public)
+ * - VITE_R2_PUBLIC_ENDPOINT (public)
  */
 
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
@@ -12,10 +19,10 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 
 const r2Client = new S3Client({
   region: 'auto',
-  endpoint: process.env.VITE_R2_ENDPOINT,
+  endpoint: process.env.R2_ENDPOINT,
   credentials: {
-    accessKeyId: process.env.VITE_R2_ACCESS_KEY_ID || '',
-    secretAccessKey: process.env.VITE_R2_SECRET_ACCESS_KEY || '',
+    accessKeyId: process.env.R2_ACCESS_KEY_ID || '',
+    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY || '',
   },
 })
 

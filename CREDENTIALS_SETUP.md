@@ -211,3 +211,54 @@ service cloud.firestore {
 - [ ] El producto se guarda en Firestore
 
 Si marcaste todo ✅ entonces está **100% listo para Vercel**.
+
+---
+
+## 🔐 IMPORTANTE: Seguridad de Variables de Entorno
+
+### Variables VITE_ (Públicas - Expuestas al Navegador)
+Estas variables son prefijadas con `VITE_` y se incluyen en el bundle de la aplicación:
+- `VITE_FIREBASE_*` - Necesarias en el frontend para autenticación
+- `VITE_R2_BUCKET_NAME` - Información pública (nombre del bucket)
+- `VITE_R2_PUBLIC_ENDPOINT` - Información pública (URL de lectura)
+- `VITE_ADMIN_DEFAULT_EMAIL` - Información pública
+
+**Estas NO contienen secretos.**
+
+### Variables SIN Prefijo (Privadas - Solo Servidor)
+Estas variables NO tienen prefijo `VITE_` y SOLO están disponibles en el servidor:
+- `R2_ENDPOINT` - Endpoint privado de R2
+- `R2_ACCESS_KEY_ID` - Credencial privada ❌ NUNCA PUBLIQUES ESTO
+- `R2_SECRET_ACCESS_KEY` - Credencial privada ❌ NUNCA PUBLIQUES ESTO
+
+**Estas NUNCA se exponen al navegador**, solo se usan en `/api/upload-url.ts` (backend).
+
+### En Vercel
+1. Configurar TODAS las variables (públicas y privadas)
+2. Las sin `VITE_` estarán disponibles SOLO en funciones serverless
+3. Las con `VITE_` estarán en el navegador
+4. El build incluirá automáticamente solo las públicas
+
+### En .env.local (Local)
+```env
+# Públicas (se exponen al navegador)
+VITE_FIREBASE_API_KEY=...
+VITE_R2_BUCKET_NAME=...
+VITE_R2_PUBLIC_ENDPOINT=...
+
+# Privadas (SOLO en el servidor)
+R2_ENDPOINT=...
+R2_ACCESS_KEY_ID=...
+R2_SECRET_ACCESS_KEY=...
+```
+
+### Verificación de Seguridad
+```bash
+# Ver qué variables se exponen en el build
+grep -r "import.meta.env" src/
+
+# Las variables sin VITE_ NO deben estar en src/
+# Solo en /api (backend)
+```
+
+**Resumen:** Las credenciales R2 están SEGURAS en el servidor, NUNCA se exponen al navegador. ✅
