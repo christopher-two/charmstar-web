@@ -1,6 +1,8 @@
 import { Link, useParams, useNavigate } from 'react-router-dom'
-import { useState } from 'react'
-import { products } from '../data/products'
+import { useState, useEffect } from 'react'
+import { doc, getDoc } from 'firebase/firestore'
+import { db } from '../lib/firebase'
+import type { Product } from '@/types/admin'
 import { Button } from '../components/ui/button'
 import { MessageCircle, ArrowLeft, ShoppingBag, Share2, Truck, CreditCard, ShieldCheck } from 'lucide-react'
 import { SEO } from '../components/SEO'
@@ -8,17 +10,41 @@ import { useCart } from '../context/CartContext'
 import { ImageModal } from '../components/ImageModal'
 import { ProductCard } from '../components/ProductCard'
 import { cn } from '../lib/utils'
-import { useEffect } from 'react'
 
 export function ProductPage() {
     const { id } = useParams<{ id: string }>()
     const navigate = useNavigate()
     const { addItem } = useCart()
-    const product = products.find(p => p.id === id)
+
+    const [product, setProduct] = useState<Product | null>(null)
+    const [loading, setLoading] = useState(true)
 
     const [isCopied, setIsCopied] = useState(false)
     const [selectedImage, setSelectedImage] = useState<string>('')
     const [isModalOpen, setIsModalOpen] = useState(false)
+
+    useEffect(() => {
+        const fetchProduct = async () => {
+            if (!id) return
+            setLoading(true)
+            try {
+                const docRef = doc(db, 'products', id)
+                const docSnap = await getDoc(docRef)
+
+                if (docSnap.exists()) {
+                    setProduct({ id: docSnap.id, ...docSnap.data() } as Product)
+                } else {
+                    setProduct(null)
+                }
+            } catch (error) {
+                console.error("Error fetching product:", error)
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        fetchProduct()
+    }, [id])
 
     // Update selected image when product loads
     useEffect(() => {
@@ -26,6 +52,10 @@ export function ProductPage() {
             setSelectedImage(product.image)
         }
     }, [product])
+
+    if (loading) {
+        return <div className="flex justify-center items-center h-screen">Loading...</div>
+    }
 
     if (!product) {
         return (
@@ -242,8 +272,8 @@ export function ProductPage() {
                 </div>
             </div>
 
-            {/* Related Products Section */}
-            <div className="mt-12 border-t pt-12">
+            {/* Related Products Section - TODO: Implement with Firestore query */}
+            {/* <div className="mt-12 border-t pt-12">
                 <h2 className="text-2xl font-serif font-medium mb-8">También te podría gustar</h2>
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
                     {products
@@ -254,7 +284,7 @@ export function ProductPage() {
                             <ProductCard key={relatedProduct.id} product={relatedProduct} />
                         ))}
                 </div>
-            </div>
+            </div> */}
         </div>
     )
 }

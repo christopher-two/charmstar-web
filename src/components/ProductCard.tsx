@@ -1,6 +1,6 @@
 import { ShoppingBag } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import type { Product } from '../data/products'
+import type { Product } from '@/types/admin'
 import { Button } from './ui/button'
 import { useCart } from '../context/CartContext'
 

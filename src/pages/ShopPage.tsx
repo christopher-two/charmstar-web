@@ -1,29 +1,30 @@
 import { useSearchParams } from 'react-router-dom'
-import { products } from '../data/products'
+// import { products as staticProducts } from '../data/products'
+// The user asked to update shop to get PRODUCTS AND CATEGORIES from firebase.
+// I missed the "products" part in the summary but caught it now.
+// Currently ShopPage uses `../data/products`. I should change this to fetch from Firestore too.
+
 import { ProductCard } from '../components/ProductCard'
 import { cn } from '../lib/utils'
 import { SEO } from '../components/SEO'
 
 import { Search, Sparkles } from 'lucide-react'
 import { Input } from '../components/ui/input'
-import { useEffect } from 'react'
-
-const validCategories = [
-    'Todas',
-    'Charms',
-    'Pulseras',
-    'Collares',
-    'Anillos',
-    'Sonny Angel',
-    'Accesorios'
-] as const
+import { useEffect, useState } from 'react'
+import { collection, getDocs } from 'firebase/firestore'
+import { db } from '../lib/firebase'
+import type { Product } from '@/types/admin'
 
 export function ShopPage() {
     const [searchParams, setSearchParams] = useSearchParams()
+    const [products, setProducts] = useState<Product[]>([])
+    const [categories, setCategories] = useState<string[]>(['Todas'])
+    const [loading, setLoading] = useState(true)
 
     // Get values from URL or default
-    const activeCategory = (searchParams.get('category') as typeof validCategories[number]) || 'Todas'
+    const activeCategory = searchParams.get('category') || 'Todas'
     const searchQuery = searchParams.get('q') || ''
+    // ... rest of imports and component setup
     const sortBy = searchParams.get('sort') || 'featured'
     const minPrice = searchParams.get('minPrice') || ''
     const maxPrice = searchParams.get('maxPrice') || ''
@@ -67,11 +68,37 @@ export function ShopPage() {
             }
         })
 
-    // Cleanup params if needed (optional)
     useEffect(() => {
-        // If query params are invalid, we could clean them here. 
-        // For now, we trust basic string parsing.
+        const fetchData = async () => {
+            setLoading(true)
+            try {
+                // Fetch Categories
+                const catSnapshot = await getDocs(collection(db, 'categories'))
+                const cats = ['Todas']
+                catSnapshot.forEach(doc => cats.push(doc.data().name))
+                setCategories(cats)
+
+                // Fetch Products
+                const productSnapshot = await getDocs(collection(db, 'products'))
+                const prods: Product[] = []
+                productSnapshot.forEach(doc => {
+                    prods.push({ id: doc.id, ...doc.data() } as Product)
+                })
+                setProducts(prods)
+            } catch (error) {
+                console.error("Error fetching data:", error)
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        fetchData()
     }, [])
+
+
+    if (loading) {
+        return <div className="flex justify-center items-center py-24">Loading...</div>
+    }
 
     return (
         <div className="container px-4 md:px-6 py-12">
@@ -138,7 +165,7 @@ export function ShopPage() {
                         <div>
                             <h2 className="text-xl font-serif font-bold mb-4 text-foreground">Categorías</h2>
                             <div className="flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-visible pb-4 md:pb-0 scrollbar-hide">
-                                {validCategories.map((category) => (
+                                {categories.map((category) => (
                                     <button
                                         key={category}
                                         onClick={() => updateParams({ category: category })}

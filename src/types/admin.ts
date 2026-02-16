@@ -2,12 +2,18 @@ export interface Product {
   id: string
   name: string
   price: number
-  category: 'Charms' | 'Pulseras' | 'Collares' | 'Anillos' | 'Sonny Angel' | 'Accesorios'
+  category: string
   image: string
   images?: string[]
   description?: string
   createdAt?: number
   updatedAt?: number
+}
+
+export interface Category {
+  id: string
+  name: string
+  createdAt: any
 }
 
 export interface AdminUser {
@@ -26,7 +32,7 @@ export interface AuthContextType {
 export interface ProductFormData {
   name: string
   price: number
-  category: Product['category']
+  category: string
   description?: string
   image: string
   images?: string[]

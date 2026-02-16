@@ -7,46 +7,59 @@
 
 export const uploadImageToR2 = async (
   file: File,
-  fileName: string
+  fileName: string,
+  category: string
 ): Promise<string> => {
   try {
-    // Step 1: Request pre-signed URL from backend
-    const uploadUrlResponse = await fetch('/api/upload-url', {
+    const response = await fetch('/api/proxy-upload', {
+      method: 'POST',
+      headers: {
+        'x-filename': fileName,
+        'x-filetype': file.type,
+        'x-category': category || 'misc',
+      },
+      body: file, // Send raw file
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(errorData.details || errorData.error || 'Upload failed')
+    }
+
+    const data = await response.json()
+    return data.publicUrl
+  } catch (error) {
+    console.error('Error uploading to R2:', error)
+    throw error // Re-throw to handle in UI
+  }
+}
+
+export const deleteImageFromR2 = async (imageUrl: string): Promise<void> => {
+  try {
+    const url = new URL(imageUrl)
+    // Extract key from URL path (remove leading slash)
+    // URL: https://pub-xxx.r2.dev/products/cat/name
+    // Key: products/cat/name
+    const fileKey = url.pathname.substring(1)
+
+    const response = await fetch('/api/delete-file', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        fileName: fileName,
-        fileType: file.type,
-      }),
+      body: JSON.stringify({ fileKey }),
     })
 
-    if (!uploadUrlResponse.ok) {
-      throw new Error(`Failed to get upload URL: ${uploadUrlResponse.statusText}`)
+    if (!response.ok) {
+      throw new Error(`Failed to delete file: ${response.statusText}`)
     }
-
-    const { uploadUrl, publicUrl } = await uploadUrlResponse.json()
-
-    // Step 2: Upload file directly to R2 using pre-signed URL
-    const uploadResponse = await fetch(uploadUrl, {
-      method: 'PUT',
-      body: file,
-      headers: {
-        'Content-Type': file.type,
-      },
-    })
-
-    if (!uploadResponse.ok) {
-      throw new Error(`Failed to upload file: ${uploadResponse.statusText}`)
-    }
-
-    // Step 3: Return the public URL
-    return publicUrl
   } catch (error) {
-    console.error('Error uploading to R2:', error)
-    throw error
+    console.error('Error deleting from R2:', error)
+    // Don't throw error here to allow product deletion to proceed
+    // even if image deletion fails (orphaned image is better than stuck product)
   }
 }
 
-export default { uploadImageToR2 }
+export default { uploadImageToR2, deleteImageFromR2 }
+
+

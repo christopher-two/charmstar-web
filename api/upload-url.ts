@@ -46,7 +46,7 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
-    const { fileName, fileType } = req.body
+    const { fileName, fileType, category = 'misc' } = req.body
 
     if (!fileName || !fileType) {
       return res.status(400).json({
@@ -54,9 +54,11 @@ export default async function handler(req: any, res: any) {
       })
     }
 
-    // Sanitize filename
+    // Sanitize filename and category
     const sanitizedName = `${Date.now()}-${fileName.replace(/[^a-zA-Z0-9.-]/g, '')}`
-    const key = `products/${sanitizedName}`
+    const sanitizedCategory = category.replace(/[^a-zA-Z0-9-]/g, '').toLowerCase()
+
+    const key = `products/${sanitizedCategory}/${sanitizedName}`
 
     const command = new PutObjectCommand({
       Bucket: process.env.VITE_R2_BUCKET_NAME,
@@ -68,7 +70,7 @@ export default async function handler(req: any, res: any) {
     const url = await getSignedUrl(r2Client, command, { expiresIn: 3600 })
 
     // Return URL and public URL
-    const publicUrl = `${process.env.VITE_R2_PUBLIC_ENDPOINT}/products/${sanitizedName}`
+    const publicUrl = `${process.env.VITE_R2_PUBLIC_ENDPOINT}/products/${sanitizedCategory}/${sanitizedName}`
 
     return res.status(200).json({
       uploadUrl: url,
