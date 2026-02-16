@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { collection, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, query, orderBy, onSnapshot } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
 import { uploadImageToR2, deleteImageFromR2 } from '@/lib/cloudflareR2'
+import { compressImage } from '@/lib/imageCompression'
 import type { ProductFormData, Product, Category } from '@/types/admin'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -79,28 +80,43 @@ export const AdminProductForm: React.FC<AdminProductFormProps> = ({
 
   // --- Handlers ---
 
-  const handleMainImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMainImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0]
-      if (file.size > 5 * 1024 * 1024) return toast.error('Max file size 5MB')
 
-      setPendingMainImage(file)
-      setMainImagePreview(URL.createObjectURL(file))
-      setValue('image', 'pending') // Placeholder to pass 'required' check if needed
+      const loadingToast = toast.loading('Processing image...')
+      try {
+        const compressedFile = await compressImage(file)
+        setPendingMainImage(compressedFile as File)
+        setMainImagePreview(URL.createObjectURL(compressedFile))
+        setValue('image', 'pending')
+        toast.dismiss(loadingToast)
+      } catch (error) {
+        toast.error('Error processing image')
+        toast.dismiss(loadingToast)
+      }
     }
   }
 
-  const handleGalleryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleGalleryChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const files = Array.from(e.target.files)
-      const validFiles = files.filter(f => f.size <= 5 * 1024 * 1024)
+      const loadingToast = toast.loading(`Processing ${files.length} images...`)
 
-      if (validFiles.length !== files.length) toast.error('Some files were skipped (Max 5MB)')
+      try {
+        const compressedFiles = await Promise.all(
+          files.map(f => compressImage(f))
+        )
 
-      setPendingGalleryImages(prev => [...prev, ...validFiles])
+        setPendingGalleryImages(prev => [...prev, ...compressedFiles as File[]])
 
-      const newPreviews = validFiles.map(f => URL.createObjectURL(f))
-      setGalleryPreviews(prev => [...prev, ...newPreviews])
+        const newPreviews = compressedFiles.map(f => URL.createObjectURL(f))
+        setGalleryPreviews(prev => [...prev, ...newPreviews])
+        toast.dismiss(loadingToast)
+      } catch (error) {
+        toast.error('Error processing gallery images')
+        toast.dismiss(loadingToast)
+      }
     }
   }
 
