@@ -94,26 +94,27 @@ export const CategoryManager: React.FC = () => {
     }
 
     return (
-        <div className="bg-card border border-border rounded-lg p-6">
-            <h2 className="text-2xl font-bold mb-6">Manage Categories</h2>
+        <div className="w-full max-w-4xl mx-auto">
+            <div className="flex justify-center mb-10 w-full">
+                <form onSubmit={handleAddCategory} className="flex gap-4 w-full max-w-xl">
+                    <Input
+                        value={newCategory}
+                        onChange={(e) => setNewCategory(e.target.value)}
+                        placeholder="New category name..."
+                        disabled={loading}
+                        className="h-12 rounded-full border-2 border-border/60 bg-background/50 focus-visible:ring-primary/20 focus-visible:border-primary transition-all shadow-sm px-6"
+                    />
+                    <Button type="submit" disabled={loading || !newCategory.trim()} className="h-12 rounded-full px-8 text-base">
+                        <Plus className="h-5 w-5 mr-2" />
+                        Add
+                    </Button>
+                </form>
+            </div>
 
-            <form onSubmit={handleAddCategory} className="flex gap-4 mb-8">
-                <Input
-                    value={newCategory}
-                    onChange={(e) => setNewCategory(e.target.value)}
-                    placeholder="New category name..."
-                    disabled={loading}
-                />
-                <Button type="submit" disabled={loading || !newCategory.trim()}>
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add
-                </Button>
-            </form>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {categories.length === 0 ? (
                     <div className="col-span-full">
-                        <p className="text-muted-foreground text-center py-12 bg-secondary/20 rounded-lg border-2 border-dashed border-border">
+                        <p className="text-muted-foreground text-center py-12 bg-secondary/20 rounded-xl border-2 border-dashed border-border">
                             No categories found. Add one above.
                         </p>
                     </div>
@@ -121,7 +122,7 @@ export const CategoryManager: React.FC = () => {
                     categories.map((cat) => (
                         <div
                             key={cat.id}
-                            className={`flex items-center justify-between p-4 bg-secondary/30 border border-border rounded-lg group transition-colors ${editingId === cat.id ? 'ring-2 ring-primary bg-background' : 'hover:bg-secondary/50'
+                            className={`flex items-center justify-between p-5 bg-background border border-border rounded-xl shadow-sm group transition-all hover:border-primary/40 hover:shadow-md ${editingId === cat.id ? 'ring-2 ring-primary border-transparent' : ''
                                 }`}
                         >
                             {editingId === cat.id ? (
@@ -129,12 +130,12 @@ export const CategoryManager: React.FC = () => {
                                     <Input
                                         value={editValue}
                                         onChange={(e) => setEditValue(e.target.value)}
-                                        className="h-8"
+                                        className="h-9"
                                         autoFocus
                                     />
                                     <Button
                                         size="icon"
-                                        className="h-8 w-8 shrink-0"
+                                        className="h-9 w-9 shrink-0"
                                         onClick={() => saveEdit(cat.id)}
                                     >
                                         <Check className="h-4 w-4" />
@@ -142,7 +143,7 @@ export const CategoryManager: React.FC = () => {
                                     <Button
                                         variant="ghost"
                                         size="icon"
-                                        className="h-8 w-8 shrink-0"
+                                        className="h-9 w-9 shrink-0"
                                         onClick={cancelEdit}
                                     >
                                         <X className="h-4 w-4" />
@@ -150,12 +151,12 @@ export const CategoryManager: React.FC = () => {
                                 </div>
                             ) : (
                                 <>
-                                    <span className="font-medium truncate pr-2">{cat.name}</span>
+                                    <span className="font-medium truncate pr-3 text-lg">{cat.name}</span>
                                     <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                         <Button
                                             variant="ghost"
                                             size="icon"
-                                            className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                                            className="h-9 w-9 text-muted-foreground hover:text-foreground"
                                             onClick={() => startEdit(cat)}
                                         >
                                             <Edit2 className="h-4 w-4" />
@@ -163,7 +164,7 @@ export const CategoryManager: React.FC = () => {
                                         <Button
                                             variant="ghost"
                                             size="icon"
-                                            className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
+                                            className="h-9 w-9 text-destructive hover:text-destructive hover:bg-destructive/10"
                                             onClick={() => handleDeleteCategory(cat.id)}
                                         >
                                             <Trash2 className="h-4 w-4" />

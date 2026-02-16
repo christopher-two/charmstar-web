@@ -231,25 +231,27 @@ export const AdminProductForm: React.FC<AdminProductFormProps> = ({
   }
 
   return (
-    <div className="bg-background rounded-xl">
-      <div className="flex justify-between items-center mb-6">
-        <Button variant="ghost" onClick={onCancel} className="gap-2 text-muted-foreground hover:text-foreground">
-          <ArrowLeft className="h-4 w-4" /> Back
-        </Button>
-        <h2 className="text-xl font-bold">{initialData ? 'Edit Product' : 'Add New Product'}</h2>
-      </div>
+    <div className="bg-background rounded-xl w-full max-w-5xl mx-auto">
+      {initialData && (
+        <div className="flex justify-between items-center mb-8 border-b border-border/40 pb-4">
+          <Button variant="ghost" onClick={onCancel} className="gap-2 text-muted-foreground hover:text-foreground">
+            <ArrowLeft className="h-4 w-4" /> Back to Products
+          </Button>
+          <h2 className="text-xl font-bold">Edit Product</h2>
+        </div>
+      )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="grid md:grid-cols-2 gap-8 lg:gap-12">
 
         {/* LEFT COLUMN - IMAGES */}
         <div className="space-y-6">
           {/* Main Image */}
-          <div className="relative aspect-square bg-muted rounded-xl overflow-hidden group border-2 border-dashed border-transparent hover:border-primary/50 transition-colors">
+          <div className="relative aspect-square bg-muted rounded-xl overflow-hidden group border-2 border-dashed border-transparent hover:border-primary/50 transition-colors max-w-sm mx-auto md:max-w-none shadow-sm">
             {mainImagePreview ? (
               <>
                 <img src={mainImagePreview} alt="Main" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <label className="cursor-pointer bg-white text-black px-4 py-2 rounded-full font-medium hover:bg-gray-100 transition-colors">
+                  <label className="cursor-pointer bg-white text-black px-4 py-2 rounded-full font-medium hover:bg-gray-100 transition-colors shadow-lg transform scale-95 group-hover:scale-100 duration-200">
                     Change Main Image
                     <input type="file" accept="image/*" onChange={handleMainImageChange} className="hidden" />
                   </label>
@@ -257,8 +259,8 @@ export const AdminProductForm: React.FC<AdminProductFormProps> = ({
               </>
             ) : (
               <label className="w-full h-full flex flex-col items-center justify-center cursor-pointer text-muted-foreground hover:text-primary transition-colors">
-                <Upload className="h-12 w-12 mb-2" />
-                <span className="font-medium">Upload Main Image</span>
+                <Upload className="h-12 w-12 mb-2 opacity-50" />
+                <span className="font-medium text-sm">Tap to Upload Image</span>
                 <input type="file" accept="image/*" onChange={handleMainImageChange} className="hidden" />
               </label>
             )}

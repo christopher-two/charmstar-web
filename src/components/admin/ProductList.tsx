@@ -77,58 +77,56 @@ export const AdminProductList: React.FC<AdminProductListProps> = ({
   }
 
   return (
-    <div className="bg-card border border-border rounded-lg p-6">
-      <h2 className="text-2xl font-bold mb-6">Products</h2>
-
-      {/* Filters */}
-      <div className="space-y-4 mb-6">
-        <div className="relative">
-          <Search className="absolute left-3 top-3 text-muted-foreground h-4 w-4" />
+    <div className="w-full">
+      {/* Search and Filter Section - Integrated */}
+      <div className="mb-8 space-y-6 text-center">
+        <div className="relative max-w-xl mx-auto">
+          <Search className="absolute left-4 top-3.5 text-muted-foreground h-5 w-5" />
           <Input
             type="text"
             placeholder="Search products..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
+            className="pl-12 h-12 rounded-full border-2 border-border/60 bg-background/50 focus-visible:ring-primary/20 focus-visible:border-primary transition-all shadow-sm text-lg"
           />
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 justify-center">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${selectedCategory === cat
-                ? 'bg-primary text-primary-foreground'
-                : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+              className={`px-5 py-2 rounded-full text-sm font-medium transition-all shadow-sm border ${selectedCategory === cat
+                ? 'bg-primary text-primary-foreground border-primary'
+                : 'bg-background text-muted-foreground border-border hover:border-primary/50 hover:text-foreground'
                 }`}
             >
-              {cat}
+              {cat.charAt(0).toUpperCase() + cat.slice(1)}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Products Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      {/* Products Grid - Integrated full width */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6">
         {filteredProducts.length === 0 ? (
-          <div className="col-span-full text-center py-12">
-            <p className="text-muted-foreground">No products found</p>
+          <div className="col-span-full text-center py-20 bg-muted/20 rounded-xl border border-dashed border-border">
+            <p className="text-muted-foreground text-lg">No products found</p>
           </div>
         ) : (
           filteredProducts.map((product) => (
             <div
               key={product.id}
               onClick={() => onEdit?.(product)}
-              className="group relative bg-background border border-border rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all cursor-pointer hover:-translate-y-1"
+              className="group relative bg-background rounded-xl overflow-hidden cursor-pointer hover:-translate-y-1 transition-all duration-300"
             >
               {/* Image */}
-              <div className="aspect-square relative overflow-hidden bg-muted">
+              <div className="aspect-square relative overflow-hidden bg-muted rounded-xl mb-3 shadow-md border border-border/50">
                 {product.image ? (
                   <img
                     src={product.image}
                     alt={product.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-muted-foreground">
@@ -136,35 +134,35 @@ export const AdminProductList: React.FC<AdminProductListProps> = ({
                   </div>
                 )}
 
-                {/* Overlay Hint */}
+                {/* Edit Hint */}
                 <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <span className="bg-background/90 text-foreground px-3 py-1 rounded-full text-xs font-medium shadow-sm">
-                    Edit Details
+                  <span className="bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold shadow-sm text-black">
+                    Edit
                   </span>
                 </div>
               </div>
 
-              {/* Content */}
-              <div className="p-4">
-                <div className="flex justify-between items-start mb-2">
-                  <span className="inline-block px-2 py-0.5 rounded-full bg-primary/10 text-primary text-xs font-medium">
-                    {product.category}
-                  </span>
+              {/* Minimal Content */}
+              <div className="px-1">
+                <div className="flex justify-between items-start mb-1">
+                  <h3 className="font-medium text-foreground text-base line-clamp-1 group-hover:text-primary transition-colors" title={product.name}>
+                    {product.name}
+                  </h3>
+                </div>
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-muted-foreground text-xs">{product.category}</span>
                   <span className="font-semibold text-foreground">
                     ${product.price}
                   </span>
                 </div>
-                <h3 className="font-medium text-foreground line-clamp-1" title={product.name}>
-                  {product.name}
-                </h3>
               </div>
             </div>
           ))
         )}
       </div>
 
-      <div className="mt-4 text-sm text-muted-foreground">
-        {filteredProducts.length} of {products.length} products
+      <div className="mt-8 text-xs text-center text-muted-foreground">
+        Showing {filteredProducts.length} products
       </div>
     </div>
   )
